@@ -1,0 +1,163 @@
+﻿@{
+    ViewData["Title"] = "Search";
+}  
+
+
+<div class="row">
+    <div class="col-md-12">  
+                <p>
+                    Title: <input type="text" name="SearchString" id="SearchString">
+                    <input type="submit" value="Search" id="submitButton" class="btn btn-info btn-lg">
+                    <input type="hidden" id="hdnCode">
+                </p>
+    </div>
+</div>
+
+
+  <div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+        <b><span class="modal-title" id="title" style="font-size: 20px"></span></b><button id="likebtn" type="button" class="btn btn-primary" onclick="btnlike()" style="float:right !important;"><span class="glyphicon glyphicon-thumbs-up" ></span></button>
+        
+      </div>
+      <div class="modal-body">
+        <h4>Information</h4>
+        <div>Country Code: <span id="code"></span></div>
+        <div>Country Capital: <span id="name"></span></div>
+        <div>Country Flag: <img id="countryImg" height="50" width="50"></div>
+        <h4>Currencies</h4>
+        <div>Currency Name: <span id="currencyname"></span></div>
+        <div>Currency Code: <span id="currencycode"></span></div>
+        <div>Convert to INR: <span id="convert" ></span></div>
+       <div class="mapouter"><div class="gmap_canvas"><iframe width="289" height="235" id="gmap_canvas"  frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe></div><a href="https://www.crocothemes.net"></a><style>.mapouter{overflow:hidden;height:235px;width:289px;}.gmap_canvas {background:none!important;height:235px;width:289px;}</style></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script type="text/javascript">  
+    $(document).ready(function () {
+        $("#SearchString").autocomplete({  
+            source: function (request, response) {  
+                $.ajax({  
+                    url: "/Home/Search",  
+                    type: "POST",  
+                    dataType: "json",  
+                    data: { "searchString" : $("#SearchString").val() }, 
+                     
+                    success: function (data) {
+                        console.log(data);  
+                        response($.map(data, function (item) {
+                            return { label: item.countryName, value: item.countryName, newProp: item.countryId};  
+                            
+                        }));    
+                    }  
+                })  
+            } ,
+             select: function(event, ui) {
+                //event.preventDefault();
+                console.log(ui);
+                $("#hdnCode").val(ui.item.newProp);
+                //window.location="#"; //location to go when you select an item
+            }
+        });  
+ $("#submitButton").click(function() {
+      $('#myModal').modal('show');
+         $.ajax({  
+                    url: "https://restcountries.eu/rest/v2/alpha/" +$("#hdnCode").val(),  
+                    type: "GET",  
+                    dataType: "json",  
+                   // data: { "countryData" : $("#SearchString").val() },  
+                    success: function (data) {
+                        console.log(data); 
+                        $("#countryImg").attr("src", data.flag);
+                        //$(".modal-header h2").text(data.name);
+                        $("#title").text(data.name);
+                        $("#name").text(data.capital);
+                        $("#code").text(data.alpha2Code);
+                         $("#currencyname").text(data.currencies[0].name);
+                          $("#currencycode").text(data.currencies[0].code);
+                        //$("#hdnCode").val(data.currencies[0].code);
+                        callCurrency();
+                        callMap();
+                    }   
+                      
+                });
+                 GetFav();
+       
+   });
+    }) 
+  function callCurrency(){
+       $.ajax({  
+            url: "https://free.currencyconverterapi.com/api/v5/convert?q="+ $("#currencycode").html() +"_INR&compact=y",  
+            type: "GET",   
+            dataType: "json",  
+            success: function (data) {
+                console.log(data); 
+                $("#convert").text(data[$("#currencycode").html()+'_INR'].val);                
+            }                   
+        });
+  }
+
+    function callMap(){
+                 $("#gmap_canvas").attr("src", "https://maps.google.com/maps?q="+$("#SearchString").val() +"&t=&z=13&ie=UTF8&iwloc=&output=embed");             
+            }  
+ 
+     function btnlike()
+     {
+          var str =$("#likebtn").text();
+                console.log(str);
+                if(str =="Like")
+                {
+                    $("#likebtn").removeClass("glyphicon glyphicon-thumbs-up");
+                    $("#likebtn").text("Liked");
+                }
+                else
+                {
+                    $("#likebtn").addClass("glyphicon glyphicon-thumbs-up");
+                    $("#likebtn").text("Like");
+                }
+
+                $.ajax({  
+                    url: "/Home/AddFavCountry",  
+                    type: "POST",  
+                      
+                    data: { "countryCode" : $("#code").html(), "likeIndicator" :str}, 
+                     
+                    success: function (data) {
+                        console.log(data);  
+                    }  
+                }) 
+     }
+     function GetFav()
+     {
+         $.ajax({  
+                    url: "/Home/GetFavCountry",  
+                    type: "GET",  
+                      
+                    data: { "countryCode" : $("#hdnCode").val()}, 
+                     
+                    success: function (data) {
+                        console.log(data);
+                        if(data==true)
+                        {
+                            
+                            $("#likebtn").removeClass("glyphicon glyphicon-thumbs-up");
+                            $("#likebtn").text("Liked");
+                        }
+                        else{
+                            $("#likebtn").addClass("glyphicon glyphicon-thumbs-up");
+                            $("#likebtn").text("Like");
+                        }
+                    }  
+                }); 
+     }                        
+</script>

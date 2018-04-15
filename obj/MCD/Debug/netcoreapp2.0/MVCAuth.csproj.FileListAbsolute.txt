@@ -1,0 +1,12 @@
+G:\Dotnet\MVCAuth\bin\MCD\Debug\netcoreapp2.0\app.db
+G:\Dotnet\MVCAuth\bin\MCD\Debug\netcoreapp2.0\MVCAuth.deps.json
+G:\Dotnet\MVCAuth\bin\MCD\Debug\netcoreapp2.0\MVCAuth.runtimeconfig.json
+G:\Dotnet\MVCAuth\bin\MCD\Debug\netcoreapp2.0\MVCAuth.runtimeconfig.dev.json
+G:\Dotnet\MVCAuth\bin\MCD\Debug\netcoreapp2.0\MVCAuth.dll
+G:\Dotnet\MVCAuth\bin\MCD\Debug\netcoreapp2.0\MVCAuth.pdb
+G:\Dotnet\MVCAuth\obj\MCD\Debug\netcoreapp2.0\MVCAuth.csproj.CoreCompileInputs.cache
+G:\Dotnet\MVCAuth\obj\MCD\Debug\netcoreapp2.0\UserSecretsAssemblyInfo.cs
+G:\Dotnet\MVCAuth\obj\MCD\Debug\netcoreapp2.0\MVCAuth.AssemblyInfoInputs.cache
+G:\Dotnet\MVCAuth\obj\MCD\Debug\netcoreapp2.0\MVCAuth.AssemblyInfo.cs
+G:\Dotnet\MVCAuth\obj\MCD\Debug\netcoreapp2.0\MVCAuth.dll
+G:\Dotnet\MVCAuth\obj\MCD\Debug\netcoreapp2.0\MVCAuth.pdb

@@ -1,0 +1,40 @@
+﻿@{
+    ViewData["Title"] = "Favourites";
+}
+<style>
+table, th, td {
+    border: 1px solid transperant;
+    padding-right: 10px;
+
+}
+</style>
+<h1>Favourites</h1>
+<table>
+    <tr>
+        <th>Country Name</th>
+        <th>Country Capital</th>
+        <th>Country Flag</th>
+    </tr>
+    @foreach(var country in Model)
+    {
+        <tr>
+            <td>@country.name</td> 
+            <td>@country.capital</td>
+            <td><Img src=@country.flag width="50" height="70"></Img></td> 
+        </tr>
+    }
+</table>
+@if (ViewBag.Page > 0)
+{
+    <a href="@Url.Action("About", new { page = ViewBag.Page - 1 })" 
+       class="btn btn-default">
+        &laquo; Prev
+    </a>
+}
+@if (ViewBag.Page < ViewBag.MaxPage)
+{
+    <a href="@Url.Action("About", new { page = ViewBag.Page + 1 })" 
+       class="btn btn-default">
+        Next &raquo;
+    </a>
+}
